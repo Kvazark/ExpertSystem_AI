@@ -120,18 +120,34 @@ rule.AddAntecedent(new IsClause("образование", "среднее спе
 rule.setConsequent(new IsClause("кандидат подходит", "нет"));
 inferenceEngine.AddRule(rule);
 
+rule = new Rule("Проверка кандидата");
+rule.AddAntecedent(new IsClause("кандидат подходит", "да"));
+rule.setConsequent(new IsClause("данные корректны", "да"));
+inferenceEngine.AddRule(rule);
 
+rule = new Rule("Проверка кандидата");
+rule.AddAntecedent(new IsClause("кандидат подходит", "нет"));
+rule.setConsequent(new IsClause("данные корректны", "да"));
+inferenceEngine.AddRule(rule);
+
+Console.WriteLine("Введите следующие значения через пробел: \nязык значения- 'En', 'Fr', 'Ch', образование- 'MD', 'BD', 'GSE' и опыт работы (целое число): ");
+
+string str = Console.ReadLine()!;
+
+inferenceEngine.AddFact(new IsClause("язык кандидата", str.Split(" ")[0]));
+inferenceEngine.AddFact(new IsClause("уровень образования", str.Split(" ")[1]));
+inferenceEngine.AddFact(new IsClause("опыт работы (в годах)", str.Split(" ")[2]));
+/*
 inferenceEngine.AddFact(new IsClause("язык кандидата", "Fr"));
 inferenceEngine.AddFact(new IsClause("уровень образования", "BD"));
 inferenceEngine.AddFact(new IsClause("опыт работы (в годах)", "2"));
-
+*/
 inferenceEngine.Infer();
 Console.WriteLine("Все факты:");
 Console.WriteLine(inferenceEngine.Facts);
 
 Console.WriteLine(" ");
-var conclusion = inferenceEngine.Facts.IsFact(new IsClause("кандидат подходит", "да")); 
-conclusion = inferenceEngine.Facts.IsFact(new IsClause("кандидат подходит", "нет")); 
+var conclusion = inferenceEngine.Facts.IsFact(new IsClause("данные корректны", "да" ));
 Console.WriteLine("Вывод:");
 Console.WriteLine(conclusion ? "Кандидат определён." : "Логически кандидат не определён.");
 
